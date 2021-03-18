@@ -1,0 +1,92 @@
+using System;
+using System.Collections.Generic;
+ 
+namespace Dll
+{
+    class Program
+    {
+        // 6 слоев
+        // 0 3 0 0 1 3
+        // Положил три крема >> слой 6, 5, 4 пропитался
+        // 6. ++++++
+        // Положил один крем >> слой 5 пропитался
+        // 5. +++++++++
+        // Без крема
+        // 4. ++++++++
+        // Без крема
+        // 3. ========
+        // Положил три крема >> слой 2 и 1 пропитались
+        // 2. ++++++++
+        // Без крема
+        // 1. ++++++++ 
+ 
+        public static List<Blin> blins = new List<Blin>(); // Массив с блинами
+ 
+        static void Main(string[] args)
+        {
+            string str = Console.ReadLine(); // Читаем первую строку входных данных
+            int t = Int32.Parse(str); // Количество входных данных
+            for (int i = 0; i < t; i++) // Выпоняем t раз для каждых данных
+            {
+                blins.Clear();
+                str = Console.ReadLine();// Читаем след строку
+                int n = Int32.Parse(str); // Записываем кол-во слоев
+                int[] a = new int[n]; // Данные объема крема
+                str = Console.ReadLine(); // Считываем строку с данными
+                for (int z = 0; z < n; z++) // Проходимся по каждому слою
+                {
+                    a[z] = str.IndexOf(" ") > -1 ? Int32.Parse(str.Remove(str.IndexOf(" "))) : Int32.Parse(str) ; // Записываем в массив объем
+                    str = str.IndexOf(" ") > -1 ?  str.Substring(str.IndexOf(" ") + 1) : str; // Удаляем записанные данные
+                    blins.Add(new Blin 
+                    {
+                        ID = z+1,
+                        food = false
+                    }); // Добавляем новый слой блина
+                }
+                Print(n, a); // Вывод ответа
+            }
+        } // end method Main
+ 
+        static void Print(int n, int[] a) // Вывод ответа
+        {
+            int z = n-1; // Счетчик индекса для массива
+            for (int i =n; i > 0; i--) // Проход по слоям
+            {
+                Krem(i, a[z]); // Расчет пропитания слоев кремом
+                z--;
+            } // end for
+            for (int i = 0; i < blins.Count; i++) // Цикл для вывода ответа
+            {
+                if(blins[i].food) // Если слой пропитан
+                    Console.Write("1 "); // Выводим 1
+                else // Если слой не пропитан
+                    Console.Write("0 "); // Выводим 0
+            } // end for
+            Console.WriteLine();// Переходи на след строку
+        }// end method Print
+ 
+        private static void Krem(int i, int count) // Расчет пропитания слоев кремом
+        {
+            if (count > 0) // Если крем был положен на слой блина
+                for (int z = i; z > 0; z--) // Расчет на сколько слоев будет упитан крем
+                {
+                    if (count > 0) // Если крем еще остался
+                    {
+                        blins[z -1 ].food = true; // Пропитываем слой
+                        count--; // Убираем одну ложку крема
+                    } // end if
+                    else // Если крема больше нет
+                        break; // Выходим из цикла
+                } // end for
+        } // end method Krem
+ 
+        
+    } // end class
+ 
+    class Blin
+    {
+        public int ID { get; set; } // ID блина
+        public bool food { get; set; } // Пропитан или нет
+    } // end class Blin
+    
+}
