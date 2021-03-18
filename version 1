@@ -1,0 +1,60 @@
+using System;
+ 
+namespace ТортНаполеон
+{
+    class Program
+    {
+        
+        static void Main(string[] args)
+        {
+            string str = Console.ReadLine(); // Читаем первую строку входных данных
+            int t = Int32.Parse(str); // Количество входных данных           
+            for (int i = 0; i < t; i++) // Выпоняем t раз для каждых данных
+            {
+                str = Console.ReadLine();// Читаем след строку
+                int n = Int32.Parse(str); // Записываем кол-во слоев
+                int[] a = new int[n]; // Данные объема крема
+                str = Console.ReadLine(); // Считываем строку с данными
+                /* На данном этапе есть:
+                 * t > кол-во данных
+                 * n > кол-во слоев
+                 * a[] > кол-во крема на слой
+                 * */
+                for (int z = 0; z < n; z++)
+                {
+                    a[z] = str.IndexOf(" ") > -1 ? Int32.Parse(str.Remove(str.IndexOf(" "))) : Int32.Parse(str); // Записываем в массив объем
+                    str = str.IndexOf(" ") > -1 ? str.Substring(str.IndexOf(" ") + 1) : str; // Удаляем записанные данные
+                }
+ 
+                Krem(a); // i - for< | j < | a^>
+ 
+ 
+ 
+            }// end for
+    } // end method Main
+ 
+        private static void Krem(int[] a)
+        {
+ 
+            int cream = 0;
+            int[] add = new int[a.Length];
+            for (int i = a.Length-1; i >= 0; i--)
+            {
+                if (a[i] > 0)
+                {
+                    add[i] = 1;
+                    cream = Math.Max(cream, a[i]) - 1;
+                }
+                else if (cream > 0)
+                {
+                    add[i] = 1;
+                    cream -= 1;
+                }
+                else
+                    add[i] = 0;
+            }
+ 
+            Console.WriteLine("{0}", string.Join(" ", add));
+        }
+    } // end class Programm
+} // end namespase ТортНаполеон
